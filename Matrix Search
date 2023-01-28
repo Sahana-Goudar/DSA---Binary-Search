@@ -1,0 +1,59 @@
+Problem Description
+  Given a matrix of integers A of size N x M and an integer B. Write an efficient algorithm that searches for integer B in matrix A.
+  This matrix A has the following properties: 
+  1) Integers in each row are sorted from left to right.
+  2) The first integer of each row is greater than or equal to the last integer of the previous row.
+  Return 1 if B is present in A, else return 0.
+NOTE: Rows are numbered from top to bottom, and columns are from left to right.
+
+Problem Constraints
+  1 <= N, M <= 1000, 1 <= A[i][j], B <= 106
+
+Input Format
+  The first argument given is the integer matrix A. The second argument given is the integer B.
+
+Output Format
+  Return 1 if B is present in A else, return 0.
+
+Example Input
+A = [ 
+      [1,   3,  5,  7]
+      [10, 11, 16, 20]
+      [23, 30, 34, 50]  
+    ]
+B = 3
+1
+
+Approach - Binary search on last column to find in which row answer might exist, then binary search on particular row.
+
+int Solution::searchMatrix(vector<vector<int> > &A, int B) {
+    int row = A.size(), col = A[0].size();
+
+    int low = 0, high = row-1;
+    int rowIndex = 0, colIndex = 0;
+    // find row
+    while(low<=high){
+        int mid = low+(high-low)/2;
+        if (A[mid][col-1] < B) low = mid+1;
+        else{
+            rowIndex = mid;
+            high = mid - 1;
+        }
+    }
+
+    low = 0, high = col-1;
+    //find col
+    while(low<=high){
+        int mid = low+(high-low)/2;
+        if (A[rowIndex][mid] < B) low = mid+1;
+        else{
+            colIndex = mid;
+            high = mid - 1;
+        }
+    }
+
+    if (A[rowIndex][colIndex] == B) return 1;
+    return 0;
+}
+
+//TC: O(LOGN) SC: O(1)
