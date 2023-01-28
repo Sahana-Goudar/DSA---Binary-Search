@@ -1,0 +1,52 @@
+Problem Description
+  Given a sorted array of integers A(0 based index) of size N, find the starting and the ending position of a given integer B in array A.
+  Your algorithm's runtime complexity must be in the order of O(log n).
+  Return an array of size 2, such that the first element = starting position of B in A and the second element = ending position of B in A, if B is not found in A return [-1, -1].
+
+Problem Constraints
+  1 <= N <= 10^6, 1 <= A[i], B <= 10^9
+
+Input Format
+  The first argument given is the integer array A.The second argument given is the integer B.
+
+Output Format
+  Return an array of size 2, such that the first element = starting position of B in A and the second element = the ending position of B in A if B is not found in A return [-1, -1].
+
+Example Input
+
+A = [5, 7, 7, 8, 8, 10], B = 8. ans = [3, 4]
+A = [5, 17, 100, 111], B = 3. ans = [-1, -1]
+
+Approach - Do binary search twice, one to find firstposition and secondposition separately. if not found return -1;
+
+Solution - 
+
+vector<int> Solution::searchRange(const vector<int> &A, int B) {
+    int n = A.size();
+    int firstPos = -1, lastPos = -1;
+    
+    int left = 0, right = n-1;
+    while(left<=right){
+        int mid = left + (right-left)/2;
+        if (A[mid]> B) right = mid-1;
+        else{
+            lastPos = mid;
+            left = mid+1;           
+        }
+    }
+
+    left = 0, right = n-1;
+    while(left<=right){
+        int mid = left + (right-left)/2;
+        if (A[mid]< B) left = mid+1;
+        else{
+            firstPos = mid;
+            right = mid-1;           
+        }
+    }
+
+    if (A[firstPos] != B) return {-1, -1};
+    return {firstPos, lastPos};
+}
+
+TC: O(LOGN), SC: O(1)
