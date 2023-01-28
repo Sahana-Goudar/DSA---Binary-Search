@@ -1,0 +1,72 @@
+Problem Description
+  Given a matrix of integers A of size N x M in which each row is sorted. Find and return the overall median of matrix A.
+  NOTE: No extra memory is allowed.
+  NOTE: Rows are numbered from top to bottom and columns are numbered from left to right.
+
+Problem Constraints
+1 <= N, M <= 10^5, 1 <= N*M <= 10^6, 1 <= A[i] <= 10^9, N*M is odd
+
+Input Format
+  The first and only argument given is the integer matrix A.
+Output Format
+  Return the overall median of matrix A.
+
+Example Input
+A = [   [1, 3, 5],
+        [2, 6, 9],                A = [1, 2, 3, 3, 5, 6, 6, 9, 9].  Median is 5. So, we return 5.
+        [3, 6, 9]   ]   ans = 5    
+
+A = [   [5, 17, 100]    ]
+
+
+
+
+Solution - 
+
+int lessCount(vector<vector<int> > &A, int mid, int row, int col){
+    int count = 0;
+    int ans = 0;
+    for(int i = 0; i<row; i++){
+        int l = 0, h = col-1;
+        count = 0;
+        while(l<=h){
+            int m = l+ (h-l)/2;
+            if (A[i][m] <= mid ){
+                count = m+1;
+                l = m + 1;
+            }
+            else h = m-1;
+        }
+        ans += count;
+    }
+    return ans;
+}
+
+int Solution::findMedian(vector<vector<int> > &A) {
+    int row = A.size();
+    int col = A[0].size();
+    int ans = 0;
+    
+    int low = INT_MAX, high = INT_MIN;
+    for(int i= 0; i<row; i++){
+        low = min(A[i][0], low);
+        high = max(A[i][col-1], high);
+    }
+
+    long countMid = ((row*col)+1)/2;
+    // cout<<" midcount : "<<countMid<<endl;
+    while(low<=high){
+        int mid = low+(high-low)/2;
+        int val = lessCount(A, mid, row, col);
+        // cout<<" mid : "<<mid<<" val : "<< val<<endl;
+        if (val <countMid)
+            low = mid+1;
+        else{
+            ans = mid;
+            high = mid-1;           
+        }
+    }
+    return ans;
+}
+
+TC : O( LOG(MAX ELEMENT - MIN ELEMENT) * ROW*LOG(COL))
