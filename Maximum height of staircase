@@ -1,0 +1,32 @@
+Problem Description
+  Given an integer A representing the number of square blocks. The height of each square block is 1. The task is to create a staircase of max-height using these blocks.
+  The first stair would require only one block, and the second stair would require two blocks, and so on. Find and return the maximum height of the staircase.
+
+Problem Constraints
+  0 <= A <= 109
+Input Format
+  The only argument given is integer A.
+Output Format
+  Return the maximum height of the staircase using these blocks.
+
+A = 10. 4, The stairs formed will have height 1, 2, 3, 4.
+A = 20. 5, The stairs formed will have height 1, 2, 3, 4, 5.
+
+Solution
+
+int Solution::solve(int A) {
+    long low = 1, high = A;
+    long val = 2*A;
+    int ans = 0;
+    while(low<=high){
+        long mid = low + (high - low)/2;
+        if (mid*(mid+1) <= val){
+            ans = mid;
+            low = mid+1;
+        }
+        else high = mid-1;
+    }
+    return ans;
+}
+
+TC: O(LOGN)
